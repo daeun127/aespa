@@ -1,0 +1,62 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class ObjectCtrl : MonoBehaviour
+{
+    enum State
+    {
+        Move,
+        Rotate,
+        Scale
+    }
+
+    Vector3 prePos;
+
+    State curState = State.Move;
+
+    void Update()
+    {
+        if(Input.GetMouseButton(0))
+        {
+            Vector3 deltaPos = Input.mousePosition - prePos;
+
+            switch (curState)
+            {
+                case State.Move:
+                    deltaPos *= (Time.deltaTime * 0.1f);
+                    transform.Translate(deltaPos.x, 0, deltaPos.y, Space.World);
+                    break;
+
+                case State.Rotate:
+                    deltaPos *= (Time.deltaTime * 10f);
+                    transform.Rotate(0, 0, deltaPos.x, Space.World);
+                    break;
+
+                case State.Scale:
+                    deltaPos *= (Time.deltaTime * 0.1f);
+                    transform.localScale += deltaPos;
+                    break;
+            }
+        }
+
+        prePos = Input.mousePosition;
+
+    }
+
+    public void OnclickMove()
+    {
+        curState = State.Move;
+    }
+
+    public void OnclickRotate()
+    {
+        curState = State.Rotate;
+    }
+
+    public void OnclickScale()
+    {
+        curState = State.Scale;
+    }
+}
